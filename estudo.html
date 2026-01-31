@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo | Mestre da Gramática</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="carregarMenuEstudo()">
+    <div class="container">
+        <a href="index.html" class="back-link">⬅ Voltar ao Início</a>
+        
+        <div id="menu-topicos">
+            <h1>O que você quer aprender?</h1>
+            <div id="lista-estudo" class="menu-grid"></div>
+        </div>
+
+        <div id="conteudo-estudo" class="hidden">
+            <button class="back-link" onclick="window.location.reload()">⬅ Voltar aos Tópicos</button>
+            <div id="detalhe-regra" class="glass-card"></div>
+        </div>
+    </div>
+    <script src="dados.js"></script>
+    <script src="engine.js"></script>
+</body>
+</html>
