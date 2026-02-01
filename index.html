@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Gramatical Pro</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mestre da Língua | Início</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
+
     <div class="container">
-        <header class="main-header">
-            <span class="badge">Plataforma Educacional 2026</span>
+        <header>
             <h1>Mestre da Língua</h1>
-            <p>Selecione uma modalidade para iniciar seus estudos.</p>
+            <p class="instruction">Escolha como deseja prosseguir:</p>
         </header>
 
-        <nav class="home-menu">
-            <a href="estudo.html" class="card-btn">
-                <div class="icon">📖</div>
-                <h2>Dicionário de Regras</h2>
-                <p>20 exemplos detalhados por categoria para consulta rápida.</p>
+        <main class="main-selection">
+            <a href="regras/regras.html" class="big-card">
+                <div class="card-content">
+                    <span class="icon">📖</span>
+                    <h2>Regras</h2>
+                    <p>Estude a teoria gramatical</p>
+                </div>
             </a>
-            <a href="pratica.html" class="card-btn">
-                <div class="icon">🎯</div>
-                <h2>Simulador de Prática</h2>
-                <p>Desafios interativos com 20 questões por tópico.</p>
+
+            <a href="pratica/pratica.html" class="big-card">
+                <div class="card-content">
+                    <span class="icon">🎯</span>
+                    <h2>Prática</h2>
+                    <p>Teste seus conhecimentos</p>
+                </div>
             </a>
-        </nav>
+        </main>
     </div>
+
+    <script src="particles.js"></script>
 </body>
 </html>

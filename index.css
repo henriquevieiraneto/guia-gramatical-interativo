@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;800&display=swap');
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #1e293b;
+
+    /* ---- NOVO FUNDO GERADO NO CSS ---- */
+    background: linear-gradient(135deg, #e0f2f7 0%, #d8eaf0 100%); /* Fundo base suave */
+    position: relative; /* Para os elementos pseudo */
+}
+
+/* Efeitos de formas no fundo, usando pseudo-elementos */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%; /* Formas circulares */
+    filter: blur(80px); /* Suaveza */
+    opacity: 0.6;
+    z-index: 0; /* Fica atrás de tudo */
+}
+
+body::before {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #a7c5ed 0%, transparent 70%); /* Círculo azul claro */
+    top: 10%;
+    left: 15%;
+    animation: moveShape 15s ease-in-out infinite alternate;
+}
+
+body::after {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #e9a7ed 0%, transparent 70%); /* Círculo rosa */
+    bottom: 5%;
+    right: 10%;
+    animation: moveShape 18s ease-in-out infinite alternate-reverse;
+}
+
+/* Animação para movimentar as formas */
+@keyframes moveShape {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 80px) scale(1.1); }
+}
+/* ---- FIM DO NOVO FUNDO ---- */
+
+
+.container {
+    text-align: center;
+    z-index: 10;
+    background: transparent;
+    position: relative; /* Importante para o z-index */
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.instruction {
+    color: #64748b;
+    margin-bottom: 50px;
+    font-size: 1.2rem;
+}
+
+.main-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.big-card {
+    background: transparent;
+    padding: 60px 40px;
+    border-radius: 40px;
+    text-decoration: none;
+    border: 2px solid rgba(115, 103, 240, 0.1);
+    transition: all 0.3s ease;
+}
+
+.big-card:hover {
+    background: rgba(115, 103, 240, 0.05);
+    border-color: #7367f0;
+    transform: translateY(-10px);
+}
+
+.icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #7367f0;
+    font-size: 2.2rem;
+    margin: 10px 0;
+}
+
+p {
+    color: #64748b;
+    margin: 0;
+}
