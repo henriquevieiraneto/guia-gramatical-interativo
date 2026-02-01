@@ -16,7 +16,7 @@ const banco = [
     { p: "O resultado foi ____ pela banca.", o: ["ratificado", "retificado"], r: "ratificado", e: "Ratificado = Confirmado." },
     { p: "O texto está confuso e precisa ser ____.", o: ["ratificado", "retificado"], r: "retificado", e: "Retificado = Corrigido." },
     { p: "Ele ____ o que o pai falou.", o: ["ratificou", "retificou"], r: "ratificou", e: "Ratificou = Concordou/Confirmou." },
-    { p: "A prefeitura ____ o nome da rua.", o: ["ratificou", "retificou"], r: "retificou", e: "Retificou = Alterou/Corrigiu." },
+    { p: "A prefeitura ____ o nome da rua.", o: ["ratificou", "retificou"], r: "retificou", e: "Retificar = Alterou/Corrigiu." },
     { p: "A empresa ____ as metas anuais.", o: ["ratificou", "retificou"], r: "ratificou", e: "Ratificou = Confirmou as metas." },
     { p: "O aluno teve que ____ sua inscrição.", o: ["ratificar", "retificar"], r: "retificar", e: "Retificar = Corrigir erros na inscrição." }
 ];
@@ -26,20 +26,28 @@ function iniciar() {
     const q = banco[atual];
     document.getElementById('num').innerText = atual + 1;
     document.getElementById('pergunta').innerText = q.p;
-    document.getElementById('opcoes').innerHTML = q.o.map(opt => 
-        `<button class="opt-btn" onclick="checar(this, '${opt}')">${opt}</button>`
-    ).join('');
+    document.getElementById('opcoes').innerHTML = q.o.map(opt => `<button class="opt-btn" onclick="checar(this, '${opt}')">${opt}</button>`).join('');
     document.getElementById('btn-prox').classList.add('hidden');
+    const f = document.getElementById('feedback'); if(f) f.classList.add('hidden');
 }
 function checar(btn, esc) {
-    const correta = banco[atual].r;
+    const q = banco[atual];
     document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-    if(esc === correta) { btn.style.background = "#4ade80"; btn.style.color = "white"; }
+    const feedback = document.getElementById('feedback') || criarFeedback();
+    feedback.innerText = q.e;
+    feedback.classList.remove('hidden');
+    if(esc === q.r) { btn.style.background = "#4ade80"; btn.style.color = "white"; }
     else { btn.style.background = "#f87171"; btn.style.color = "white"; }
     document.getElementById('btn-prox').classList.remove('hidden');
 }
-function proxima() {
-    atual++;
-    if(atual < banco.length) iniciar();
-    else { document.querySelector('.quiz-box').innerHTML = "<h2>Simulado Concluído!</h2><a href='../pratica.html' class='back'>Voltar</a>"; }
+function criarFeedback() {
+    const p = document.createElement('p'); p.id = 'feedback';
+    p.style.cssText = "margin-top:20px; color:#64748b; font-style:italic; font-weight:600; line-height:1.4;";
+    document.getElementById('opcoes').after(p);
+    return p;
+}
+function proxima() { 
+    atual++; 
+    if(atual < banco.length) iniciar(); 
+    else document.querySelector('.quiz-box').innerHTML = "<h2>Simulado Concluído!</h2><a href='../pratica.html' class='back'>Voltar</a>"; 
 }
