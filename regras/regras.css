@@ -1,49 +1,132 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(-45deg, #0f172a, #1e293b, #7367f0, #1e1b4b);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
     margin: 0;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    /* Fundo degradê gerado no CSS */
-    background: linear-gradient(135deg, #e0f2f7 0%, #d8eaf0 100%);
+    min-height: 100vh;
+    padding: 40px 0;
+    color: #f8fafc;
+    overflow-x: hidden;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#particles-js {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
 }
 
 .container {
-    text-align: center;
-    z-index: 10;
     width: 90%;
-    max-width: 600px;
+    max-width: 850px;
+    z-index: 10;
+    position: relative;
+    text-align: center;
 }
 
 .back {
     text-decoration: none;
-    color: #7367f0;
+    color: rgba(255, 255, 255, 0.6);
     font-weight: 800;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     display: inline-block;
-}
-
-h1 { font-size: 2.5rem; font-weight: 800; color: #1e293b; margin-bottom: 30px; }
-
-.list { display: flex; flex-direction: column; gap: 15px; }
-
-.list a {
-    background: transparent;
-    padding: 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    color: #1e293b;
-    font-weight: 700;
-    border: 2px solid rgba(115, 103, 240, 0.2);
     transition: 0.3s;
 }
 
+.back:hover { color: #fff; transform: translateX(-5px); }
+
+h1 { 
+    font-size: 2.8rem; 
+    font-weight: 800; 
+    color: #fff; 
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+
+/* --- TRANSFORMAÇÃO DOS LINKS EM BOTÕES --- */
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.list a {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white !important;
+    padding: 16px 32px;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .list a:hover {
-    border-color: #7367f0;
-    background: rgba(115, 103, 240, 0.05);
-    transform: translateX(10px);
+    background-color: #5d5dff;
+    border-color: #fff;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(93, 93, 255, 0.4);
+}
+
+/* --- ORGANIZAÇÃO DOS EXEMPLOS (PÁGINAS DE TEORIA) --- */
+.content-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 40px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.secao-titulo {
+    color: #a78bfa; 
+    font-weight: 800;
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.exemplo-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 4px solid #7367f0;
+    padding: 15px 20px;
+    border-radius: 0 15px 15px 0;
+    margin-top: 15px;
+}
+
+.exemplo-box b {
+    color: #ffd700; /* Destaque dourado para a palavra chave */
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+}
+
+@media (max-width: 600px) {
+    .list a { width: 100%; text-align: center; }
+    h1 { font-size: 2rem; }
 }

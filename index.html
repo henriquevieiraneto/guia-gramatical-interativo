@@ -3,36 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mestre da Língua | Início</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Gramática Interativa | Início</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>Mestre da Língua</h1>
-            <p class="instruction">Escolha como deseja prosseguir:</p>
+    <div id="particles-js"></div> <main class="container">
+        <header class="hero">
+            <h1 class="title">Gramática<span>Interativa</span></h1>
+            <p class="subtitle">Aprenda de forma leve e eficaz</p>
         </header>
 
-        <main class="main-selection">
-            <a href="regras/regras.html" class="big-card">
-                <div class="card-content">
-                    <span class="icon">📖</span>
+        <nav class="menu-grid">
+            <a href="regras/regras.html" class="card">
+                <div class="card-icon">📚</div>
+                <div class="card-info">
                     <h2>Regras</h2>
-                    <p>Estude a teoria gramatical</p>
+                    <p>Teoria completa com exemplos e dicas valiosas.</p>
                 </div>
             </a>
 
-            <a href="pratica/pratica.html" class="big-card">
-                <div class="card-content">
-                    <span class="icon">🎯</span>
+            <a href="pratica/pratica.html" class="card">
+                <div class="card-icon">✍️</div>
+                <div class="card-info">
                     <h2>Prática</h2>
-                    <p>Teste seus conhecimentos</p>
+                    <p>Simulados interativos com feedback inteligente.</p>
                 </div>
             </a>
-        </main>
-    </div>
+        </nav>
+    </main>
 
-    <script src="particles.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="particles.js"></script> 
 </body>
 </html>

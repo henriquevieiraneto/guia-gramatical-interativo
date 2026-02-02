@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
+/* --- Resets e Configurações Globais --- */
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +9,6 @@
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    /* Fundo Gradiente Animado - PADRÃO DO PROJETO */
     background: linear-gradient(-45deg, #0f172a, #1e293b, #7367f0, #1e1b4b);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
@@ -18,9 +18,9 @@ body {
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+    padding: 20px;
 }
 
-/* Animação do Gradiente */
 @keyframes gradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -29,51 +29,41 @@ body {
 
 #particles-js {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     z-index: 1;
 }
 
+/* --- Container Principal --- */
 .container {
     text-align: center;
     z-index: 10;
     width: 90%;
-    max-width: 600px;
-    padding: 20px;
+    max-width: 700px;
+    position: relative;
 }
 
-/* Link de Voltar */
 .back {
     text-decoration: none;
     color: rgba(255, 255, 255, 0.6);
-    font-weight: 700;
+    font-weight: 800;
     margin-bottom: 25px;
     display: inline-block;
     transition: 0.3s;
 }
 
-.back:hover {
-    color: #fff;
-    transform: translateX(-5px);
+.back:hover { 
+    color: #fff; 
+    transform: translateX(-5px); 
 }
 
 h1 { 
     font-size: 2.5rem; 
     font-weight: 800; 
-    color: #ffffff; 
-    margin-bottom: 10px;
-    letter-spacing: -1px;
+    color: #fff; 
+    margin-bottom: 30px; 
 }
 
-p { 
-    color: #cbd5e1; 
-    margin-bottom: 40px; 
-    font-size: 1.1rem;
-}
-
-/* LISTA DE SIMULADOS */
+/* --- Menu de Links (Transformados em Botões) --- */
 .list { 
     display: flex; 
     flex-direction: column; 
@@ -81,34 +71,32 @@ p {
 }
 
 .list a {
-    background: rgba(255, 255, 255, 0.05); /* Efeito vidro */
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 22px;
+    padding: 20px;
     border-radius: 20px;
     text-decoration: none;
     color: #fff;
     font-weight: 700;
-    font-size: 1.1rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: left;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Efeito Hover nos itens da lista */
 .list a:hover {
     border-color: #7367f0;
     background: rgba(115, 103, 240, 0.15);
-    transform: scale(1.03) translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02) translateX(5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Adicionando um ícone de seta sutil via CSS (opcional) */
-.list a::after {
-    content: '→';
-    opacity: 0.5;
+.list a::after { 
+    content: '→'; 
+    opacity: 0.5; 
     transition: 0.3s;
 }
 
@@ -117,9 +105,42 @@ p {
     transform: translateX(5px);
 }
 
-/* AJUSTES MOBILE */
+/* --- Container das Regras (Para as páginas de teoria) --- */
+.regra-box {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+.regra-titulo {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #a0a0ed;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* --- Estilização dos Exemplos --- */
+.exemplo-container {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 12px;
+    border-left: 4px solid #5d5dff;
+    line-height: 1.6;
+}
+
+.exemplo-container b {
+    color: #ffd700; /* Cor dourada para destacar a palavra-chave */
+    font-weight: 800;
+}
+
+/* --- Responsividade --- */
 @media (max-width: 600px) {
     h1 { font-size: 2rem; }
-    .list a { padding: 18px; font-size: 1rem; }
     .container { width: 100%; }
+    .list a { padding: 15px; }
 }
