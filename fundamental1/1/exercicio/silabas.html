@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Sílabas | 20 Questões</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <style>
+        .game-container { text-align: center; max-width: 800px; margin: 0 auto; }
+        .progress-bar { width: 100%; height: 12px; background: #333; border-radius: 6px; margin: 20px 0; overflow: hidden; border: 1px solid #444; }
+        .progress-fill { height: 100%; background: #4ade80; width: 0%; transition: 0.5s; }
+        
+        .word-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 40px; 
+            border-radius: 20px; 
+            font-size: 3.5rem; 
+            color: #fff; 
+            font-weight: 800; 
+            margin: 30px 0; 
+            border: 2px solid #7367f0;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        .options-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        
+        .opt-btn { 
+            background: #1a1a1a; 
+            border: 3px solid #7367f0; 
+            color: white; 
+            width: 85px; 
+            height: 85px; 
+            border-radius: 50%; 
+            font-size: 2.2rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: 800;
+        }
+
+        .opt-btn:hover { background: #7367f0; transform: scale(1.1); box-shadow: 0 0 15px #7367f0; }
+
+        .back-button { display: inline-block; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
+        .back-button:hover { color: #4ade80; }
+
+        #feedback { height: 40px; margin-top: 25px; font-weight: 800; font-size: 1.4rem; }
+        .score-box { background: #4ade80; color: #000; padding: 6px 15px; border-radius: 20px; font-weight: 800; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <main class="container">
+        <header>
+            <a href="index.html" class="back-button">← Voltar para Exercícios</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="question-counter" style="color: #aaa;">Questão 1 de 20</span>
+                <span id="score-badge" class="score-box">XP: 0</span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <h1>Quantas sílabas?</h1>
+        </header>
+
+        <div class="content-box game-container" id="game-ui">
+            <div class="word-card" id="target-word">---</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkAnswer(1)">1</button>
+                <button class="opt-btn" onclick="checkAnswer(2)">2</button>
+                <button class="opt-btn" onclick="checkAnswer(3)">3</button>
+                <button class="opt-btn" onclick="checkAnswer(4)">4</button>
+            </div>
+            <p id="feedback"></p>
+        </div>
+    </main>
+
+    <script>
+        // BANCO DE DADOS COM AS 20 QUESTÕES DETALHADAS
+        const database = [
+            { w: "SOL", s: 1 }, { w: "PATO", s: 2 }, { w: "BONECA", s: 3 },
+            { w: "JACARÉ", s: 3 }, { w: "PÉ", s: 1 }, { w: "CASA", s: 2 },
+            { w: "BORBOLETA", s: 4 }, { w: "GATO", s: 2 }, { w: "PIPOCA", s: 3 },
+            { w: "BOLA", s: 2 }, { w: "ELEFANTE", s: 4 }, { w: "MÃO", s: 1 },
+            { w: "BANANA", s: 3 }, { w: "CAVALO", s: 3 }, { w: "CÉU", s: 1 },
+            { w: "TELEFONE", s: 4 }, { w: "DADO", s: 2 }, { w: "PIRULITO", s: 4 },
+            { w: "BOLO", s: 2 }, { w: "SAPATO", s: 3 }
+        ];
+
+        // Embaralhar para o aluno não decorar a ordem
+        database.sort(() => Math.random() - 0.5);
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentIdx >= 20) {
+                showResult();
+                return;
+            }
+
+            const data = database[currentIdx];
+            document.getElementById('target-word').innerText = data.w;
+            document.getElementById('question-counter').innerText = `Questão ${currentIdx + 1} de 20`;
+            document.getElementById('progress').style.width = `${(currentIdx / 20) * 100}%`;
+        }
+
+        function checkAnswer(selected) {
+            const data = database[currentIdx];
+            const fb = document.getElementById('feedback');
+            
+            if(selected === data.s) {
+                score++;
+                fb.innerText = "🌟 CORRETO!";
+                fb.style.color = "#4ade80";
+                document.getElementById('score-badge').innerText = `XP: ${score * 10}`;
+            } else {
+                fb.innerText = `❌ ${data.w} TEM ${data.s} SÍLABAS.`;
+                fb.style.color = "#f87171";
+            }
+            
+            currentIdx++;
+            setTimeout(() => {
+                fb.innerText = "";
+                loadQuestion();
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('progress').style.width = "100%";
+            document.getElementById('game-ui').innerHTML = `
+                <h2 style="color: #4ade80; font-size: 2.5rem;">FIM DO JOGO!</h2>
+                <p style="font-size: 1.5rem; margin: 15px 0;">Você acertou ${score} de 20!</p>
+                <div style="font-size: 2rem; margin-bottom: 20px;">Total: <strong>${score * 10} XP</strong></div>
+                <button class="opt-btn" onclick="location.reload()" style="width: auto; height: auto; padding: 15px 30px; border-radius: 15px; font-size: 1.2rem;">RECOMEÇAR</button>
+            `;
+        }
+
+        loadQuestion();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prática: Sílabas | Mestre da Língua</title>
+    <link rel="stylesheet" href="../../regras/regras.css">
+    <style>
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .word-display {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn-option {
+            background: rgba(115, 103, 240, 0.3);
+            border: 2px solid #7367f0;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-option:hover { background: #7367f0; }
+        #feedback { margin-top: 20px; font-weight: 600; min-height: 24px; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <header>
+            <a href="exercicios.html" class="back">← Voltar</a>
+            <h1>Quantos pedaços?</h1>
+            <p>Clique no número de sílabas da palavra abaixo!</p>
+        </header>
+
+        <div class="content-box">
+            <div class="game-card">
+                <div class="word-display" id="word">BONECA</div>
+                <div class="options">
+                    <button class="btn-option" onclick="check(1)">1</button>
+                    <button class="btn-option" onclick="check(2)">2</button>
+                    <button class="btn-option" onclick="check(3)">3</button>
+                    <button class="btn-option" onclick="check(4)">4</button>
+                </div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function check(num) {
+            const feedback = document.getElementById('feedback');
+            if (num === 3) {
+                feedback.innerHTML = "🌟 Parabéns! BO-NE-CA tem 3 sílabas!";
+                feedback.style.color = "#4ade80";
+            } else {
+                feedback.innerHTML = "❌ Quase lá! Tente falar a palavra devagar.";
+                feedback.style.color = "#f87171";
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

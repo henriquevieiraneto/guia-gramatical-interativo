@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Frases | 20 Questões</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <style>
+        .game-container { text-align: center; }
+        .progress-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #a855f7; width: 0%; transition: 0.5s; }
+        .phrase-box { 
+            background: rgba(255,255,255,0.05); 
+            padding: 30px; 
+            border-radius: 15px; 
+            font-size: 2.5rem; 
+            color: #fff; 
+            font-weight: 800; 
+            margin: 30px 0; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 2px dashed #7367f0;
+        }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .opt-btn { 
+            background: rgba(115, 103, 240, 0.1); 
+            border: 2px solid #7367f0; 
+            color: white; 
+            padding: 15px; 
+            border-radius: 12px; 
+            font-size: 1.3rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: 600;
+        }
+        .opt-btn:hover { background: #7367f0; transform: translateY(-3px); }
+        .back-button { display: inline-block; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; font-weight: 600; }
+        .back-button:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">← Voltar para Exercícios</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="question-counter">Questão 1 de 20</span>
+                <span id="score-badge" style="background: #a855f7; padding: 5px 10px; border-radius: 5px; font-weight: bold;">XP: 0</span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <h1>Como se escreve corretamente?</h1>
+            <p>As palavras abaixo estão muito grudadas!</p>
+        </header>
+
+        <div class="content-box game-container" id="game-ui">
+            <div class="phrase-box" id="target-phrase">OGATOÉFOFO</div>
+            <div class="options-grid" id="options">
+                </div>
+            <p id="feedback" style="height: 30px; margin-top: 25px; font-weight: bold; font-size: 1.2rem;"></p>
+        </div>
+    </div>
+
+    <script>
+        const database = [
+            { grudado: "OGATOÉFOFO", certo: "O GATO É FOFO", errado: ["OGATO ÉFOFO", "O GATOÉ FOFO"] },
+            { grudado: "ABALAEBÔA", certo: "A BALA É BOA", errado: ["ABA LAÉ BOA", "A BALAE BOA"] },
+            { grudado: "OBOIÉBABÃO", certo: "O BOI É BABÃO", errado: ["OBOI É BABÃO", "O BOIÉ BABÃO"] },
+            { grudado: "EUVIAUVA", certo: "EU VI A UVA", errado: ["EU VIA UVA", "EUVIA UVA"] },
+            { grudado: "OVOVÔÉBOM", certo: "O VOVÔ É BOM", errado: ["OVOVÔ É BOM", "O VOVÔÉ BOM"] },
+            { grudado: "DUDUÉREI", certo: "DUDU É REI", errado: ["DUDUÉ REI", "DUDU ÉREI"] },
+            { grudado: "ABOLAÉAZUL", certo: "A BOLA É AZUL", errado: ["ABOLA É AZUL", "A BOLAÉ AZUL"] },
+            { grudado: "AMÃEÉBELA", certo: "A MÃE É BELA", errado: ["AMÃE É BELA", "A MÃEÉ BELA"] },
+            { grudado: "OPIÃOÉMEU", certo: "O PIÃO É MEU", errado: ["OPIÃO É MEU", "O PIÃOÉ MEU"] },
+            { grudado: "SABUÉCÃO", certo: "SABU É CÃO", errado: ["SABUÉ CÃO", "SABU ÉCÃO"] },
+            { grudado: "OLÁÉALÔ", certo: "OLÁ É ALÔ", errado: ["OLÁÉ ALÔ", "OLÁ ÉALÔ"] },
+            { grudado: "EUDOUOI", certo: "EU DOU OI", errado: ["EUDOU OI", "EU DOUOI"] },
+            { grudado: "BIAÉFEIA", certo: "BIA É FEIA", errado: ["BIAÉ FEIA", "BIA ÉFEIA"] },
+            { grudado: "OCAUÊSAI", certo: "O CAUÊ SAI", errado: ["OCAUÊ SAI", "O CAUÊSAI"] },
+            { grudado: "ADUDAFOI", certo: "A DUDA FOI", errado: ["ADUDA FOI", "ADU DAFOI"] }, // Ajustado para lógica
+            { grudado: "ABABÁÉBOA", certo: "A BABÁ É BOA", errado: ["ABABÁ É BOA", "A BABÁÉ BOA"] },
+            { grudado: "EULEIO", certo: "EU LEIO", errado: ["EULE IO", "EU LE IO"] },
+            { grudado: "AAVEVOA", certo: "A AVE VOA", errado: ["AAVE VOA", "A AVEVOA"] },
+            { grudado: "OVOVÓVÊ", certo: "A VOVÓ VÊ", errado: ["AVOVÓ VÊ", "A VOVÓVÊ"] },
+            { grudado: "ABIBIÉBOA", certo: "A BIBI É BOA", errado: ["ABIBI É BOA", "A BIBIÉ BOA"] }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentIdx >= 20) {
+                showResult();
+                return;
+            }
+
+            const data = database[currentIdx];
+            document.getElementById('target-phrase').innerText = data.grudado;
+            document.getElementById('question-counter').innerText = `Questão ${currentIdx + 1} de 20`;
+            document.getElementById('progress').style.width = `${((currentIdx + 1) / 20) * 100}%`;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            let choices = [data.certo, ...data.errado].sort(() => Math.random() - 0.5);
+            
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = choice;
+                btn.onclick = () => checkAnswer(choice === data.certo);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(correct) {
+            const fb = document.getElementById('feedback');
+            if(correct) {
+                score++;
+                fb.innerText = "🌟 EXCELENTE! VOCÊ SEPAROU DIREITINHO!";
+                fb.style.color = "#4ade80";
+                document.getElementById('score-badge').innerText = `XP: ${score * 10}`;
+            } else {
+                fb.innerText = "❌ CUIDADO! AINDA TEM PALAVRA GRUDADA.";
+                fb.style.color = "#f87171";
+            }
+            
+            currentIdx++;
+            setTimeout(() => {
+                fb.innerText = "";
+                loadQuestion();
+            }, 1500);
+        }
+
+        function showResult() {
+            document.getElementById('game-ui').innerHTML = `
+                <h2 style="color: #ffd700;">🏆 Desafio das Frases Concluído!</h2>
+                <p style="font-size: 1.5rem; margin: 20px 0;">Você organizou <strong>${score}</strong> frases com perfeição!</p>
+                <button class="opt-btn" onclick="location.reload()" style="width: auto; padding: 0 30px;">Praticar Mais</button>
+            `;
+        }
+
+        loadQuestion();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

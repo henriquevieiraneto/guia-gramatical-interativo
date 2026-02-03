@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mestre das Rimas | 20 Questões</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <style>
+        .game-container { text-align: center; }
+        .progress-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #ffd700; width: 0%; transition: 0.5s; }
+        .word-card { font-size: 3.5rem; color: #ffd700; font-weight: 800; margin: 20px 0; text-transform: uppercase; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn { background: rgba(255,255,255,0.05); border: 2px solid #7367f0; color: white; padding: 20px; border-radius: 15px; font-size: 1.4rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
+        .opt-btn:hover { background: #7367f0; transform: scale(1.02); }
+        .back-button { display: inline-block; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; font-weight: 600; }
+        .back-button:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">← Voltar para Exercícios</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="question-counter">Questão 1 de 20</span>
+                <span id="score-badge" style="background: #7367f0; padding: 5px 10px; border-radius: 5px; font-weight: bold;">XP: 0</span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <h1>Qual palavra rima?</h1>
+        </header>
+
+        <div class="content-box game-container" id="game-ui">
+            <div class="word-card" id="target-word">---</div>
+            <div class="options-grid" id="options">
+                </div>
+            <p id="feedback" style="height: 30px; margin-top: 25px; font-weight: bold; font-size: 1.2rem;"></p>
+        </div>
+    </div>
+
+    <script>
+        const database = [
+            { w: "GATO", r: "RATO", o: ["BOLA", "CASA", "DADO"] },
+            { w: "JANELA", r: "PANELA", o: ["SOL", "LUA", "PÉ"] },
+            { w: "BALÃO", r: "SABÃO", o: ["GATO", "MESA", "LIVRO"] },
+            { w: "MÃO", r: "CÃO", o: ["FOGO", "BOTA", "RIO"] },
+            { w: "COLA", r: "BOLA", o: ["DENTE", "MAÇÃ", "SAPO"] },
+            { w: "DENTE", r: "PENTE", o: ["CHAVE", "PIÃO", "MAR"] },
+            { w: "CHULE", r: "PÉ", o: ["CÉU", "TATU", "VENTO"] },
+            { w: "BOTA", r: "GOTA", o: ["FLOR", "ILHA", "MEL"] },
+            { w: "FOGO", r: "JOGO", o: ["TREM", "LÁPIS", "URSO"] },
+            { w: "PIÃO", r: "AVIÃO", o: ["CAMA", "DEDO", "OVO"] },
+            { w: "DADO", r: "CADEADO", o: ["RUA", "PATO", "BOI"] },
+            { w: "BONECA", r: "CANECA", o: ["MALA", "SINO", "LUVA"] },
+            { w: "CABELO", r: "GELO", o: ["SAPO", "FACA", "LEÃO"] },
+            { w: "ESPADA", r: "FADA", o: ["TIJOLO", "CHUVA", "SOL"] },
+            { w: "ESCOLAS", r: "MOLAS", o: ["PENTE", "GATO", "PAU"] },
+            { w: "PUDIM", r: "JARDIM", o: ["VACA", "PEIXE", "TETO"] },
+            { w: "BANANA", r: "CABANA", o: ["SUCO", "MELÃO", "PATO"] },
+            { w: "RATO", r: "SAPATO", o: ["ORELHA", "NAVIO", "BOCA"] },
+            { w: "BORBOLETA", r: "CHUPETA", o: ["GELO", "FOGO", "ANEL"] },
+            { w: "MEL", r: "ANEL", o: ["LUA", "RODA", "SOFÁ"] }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentIdx >= 20) {
+                showResult();
+                return;
+            }
+
+            const data = database[currentIdx];
+            document.getElementById('target-word').innerText = data.w;
+            document.getElementById('question-counter').innerText = `Questão ${currentIdx + 1} de 20`;
+            document.getElementById('progress').style.width = `${((currentIdx + 1) / 20) * 100}%`;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            let choices = [...data.o, data.r].sort(() => Math.random() - 0.5);
+            
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = choice;
+                btn.onclick = () => checkAnswer(choice === data.r);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(correct) {
+            const fb = document.getElementById('feedback');
+            if(correct) {
+                score++;
+                fb.innerText = "🌟 ISSO! SOM FINAL IGUAL!";
+                fb.style.color = "#4ade80";
+                document.getElementById('score-badge').innerText = `XP: ${score * 10}`;
+            } else {
+                fb.innerText = "❌ OPS! O SOM FINAL É DIFERENTE.";
+                fb.style.color = "#f87171";
+            }
+            
+            currentIdx++;
+            setTimeout(() => {
+                fb.innerText = "";
+                loadQuestion();
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('game-ui').innerHTML = `
+                <h2 style="color: #ffd700;">🏆 Fim do Desafio!</h2>
+                <p style="font-size: 1.5rem; margin: 20px 0;">Você rimou <strong>${score}</strong> de 20 palavras!</p>
+                <button class="opt-btn" onclick="location.reload()" style="width: auto; padding: 0 30px;">Jogar de Novo</button>
+            `;
+        }
+
+        loadQuestion();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

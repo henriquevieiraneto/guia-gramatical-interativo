@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quem Pontua Mais? | 20 Questões</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos específicos para o jogo */
+        .game-container { text-align: center; max-width: 800px; margin: 0 auto; }
+        
+        .progress-bar { width: 100%; height: 12px; background: #333; border-radius: 6px; margin: 20px 0; overflow: hidden; border: 1px solid #444; }
+        .progress-fill { height: 100%; background: #ffd700; width: 0%; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        .phrase-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 40px 20px; 
+            border-radius: 20px; 
+            font-size: 2.2rem; 
+            color: #fff; 
+            font-weight: 800; 
+            margin: 30px 0; 
+            border: 2px solid #7367f0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+        }
+
+        .options-grid { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+        
+        .ponto-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+        .ponto-btn { 
+            background: #1a1a1a; 
+            border: 4px solid #7367f0; 
+            color: #ffd700; 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            font-size: 3.5rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ponto-btn:hover { background: #7367f0; color: white; transform: scale(1.1) rotate(5deg); }
+        
+        .ponto-label { color: rgba(255,255,255,0.8); margin-top: 12px; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; }
+
+        .back-button { display: inline-block; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
+        .back-button:hover { color: #ffd700; transform: translateX(-5px); }
+
+        #feedback { height: 40px; margin-top: 25px; font-weight: 800; font-size: 1.4rem; transition: 0.3s; }
+        
+        .score-box { background: #ffd700; color: #000; padding: 6px 15px; border-radius: 20px; font-weight: 800; box-shadow: 0 4px 15px rgba(255,215,0,0.3); }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <main class="container">
+        <header>
+            <a href="index.html" class="back-button">← Voltar para Exercícios</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="question-counter" style="color: #aaa;">Questão 1 de 20</span>
+                <span id="score-badge" class="score-box">XP: 0</span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <h1 style="font-size: 1.8rem; margin-top: 10px;">Qual é o sinal certo?</h1>
+        </header>
+
+        <div class="content-box game-container" id="game-ui">
+            <div class="phrase-card" id="target-phrase">CARREGANDO...</div>
+            
+            <div class="options-grid">
+                <div class="ponto-wrapper">
+                    <button class="ponto-btn" onclick="checkAnswer('.')">.</button>
+                    <span class="ponto-label">AFIRMAÇÃO</span>
+                </div>
+                <div class="ponto-wrapper">
+                    <button class="ponto-btn" onclick="checkAnswer('?')">?</button>
+                    <span class="ponto-label">PERGUNTA</span>
+                </div>
+            </div>
+            <p id="feedback"></p>
+        </div>
+    </main>
+
+    <script>
+        const database = [
+            // PERGUNTAS (?)
+            { f: "QUAL É A TUA COR FAVORITA", p: "?" },
+            { f: "VOCÊ QUER BRINCAR DE BOLA", p: "?" },
+            { f: "ONDE ESTÁ O MEU SAPATO", p: "?" },
+            { f: "QUEM COMEU O BOLO DE DOCE", p: "?" },
+            { f: "PODEMOS IR AO PARQUE HOJE", p: "?" },
+            { f: "COMO SE CHAMA O TEU CÃO", p: "?" },
+            { f: "VOCÊ JÁ SABE LER SOZINHO", p: "?" },
+            { f: "CADÊ O LÁPIS QUE ESTAVA AQUI", p: "?" },
+            { f: "QUE HORAS COMEÇA A AULA", p: "?" },
+            { f: "VOCÊ GOSTA DE COMER MAÇÃ", p: "?" },
+            // AFIRMAÇÕES (.)
+            { f: "O SOL BRILHA NO CÉU AZUL", p: "." },
+            { f: "A MENINA COMEU TODA A SOPA", p: "." },
+            { f: "O GATO DORME NO SOFÁ", p: "." },
+            { f: "EU TENHO MUITOS AMIGOS", p: "." },
+            { f: "O CARRO DO PAPAI É NOVO", p: "." },
+            { f: "A FLOR DO JARDIM É CHEIROSA", p: "." },
+            { f: "A BOLA ROLOU PARA A RUA", p: "." },
+            { f: "HOJE O DIA ESTÁ MUITO LINDO", p: "." },
+            { f: "O PEIXE NADA NA ÁGUA FRIA", p: "." },
+            { f: "EU GOSTO MUITO DE ESTUDAR", p: "." }
+        ];
+
+        // Embaralha as questões para não ser sempre a mesma ordem
+        database.sort(() => Math.random() - 0.5);
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentIdx >= 20) {
+                showResult();
+                return;
+            }
+
+            const data = database[currentIdx];
+            document.getElementById('target-phrase').innerText = data.f;
+            document.getElementById('question-counter').innerText = `Questão ${currentIdx + 1} de 20`;
+            document.getElementById('progress').style.width = `${((currentIdx) / 20) * 100}%`;
+        }
+
+        function checkAnswer(selected) {
+            const data = database[currentIdx];
+            const fb = document.getElementById('feedback');
+            
+            if(selected === data.p) {
+                score++;
+                fb.innerText = "🌟 EXCELENTE! VOCÊ ACERTOU!";
+                fb.style.color = "#4ade80";
+                document.getElementById('score-badge').innerText = `XP: ${score * 10}`;
+            } else {
+                fb.innerText = "❌ OPS! PENSE NA ENTONAÇÃO.";
+                fb.style.color = "#f87171";
+            }
+            
+            currentIdx++;
+            // Pequena pausa para o aluno ver o feedback antes da próxima
+            setTimeout(() => {
+                fb.innerText = "";
+                loadQuestion();
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('progress').style.width = "100%";
+            document.getElementById('game-ui').innerHTML = `
+                <div style="padding: 20px;">
+                    <h2 style="color: #ffd700; font-size: 2.5rem; margin-bottom: 10px;">🏆 PARABÉNS!</h2>
+                    <p style="font-size: 1.4rem; color: #fff;">Você completou o desafio de pontuação!</p>
+                    <div style="font-size: 3rem; margin: 20px 0;">🎯 ${score}/20</div>
+                    <p style="margin-bottom: 30px; color: #aaa;">Total de Pontos: <strong>${score * 10} XP</strong></p>
+                    <button class="ponto-btn" onclick="location.reload()" style="width: auto; height: auto; padding: 15px 40px; border-radius: 12px; font-size: 1.2rem;">JOGAR DE NOVO</button>
+                </div>
+            `;
+        }
+
+        // Inicia o jogo
+        loadQuestion();
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

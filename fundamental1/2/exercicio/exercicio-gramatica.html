@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Gramática - 2º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair do Jogo</a>
+            <h1><span>⚙️</span> Mestre da Gramática</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">Responda corretamente:</p>
+                <div id="word-display" class="word-card">BRASIL</div>
+                
+                <div id="options" class="options-grid">
+                    </div>
+            </div>
+
+            <div id="feedback"></div>
+        </div>
+    </main>
+
+    <script>
+        const questoesGramatica = [
+            // Substantivos Próprios e Comuns
+            { p: "'BRASIL' é um nome...", opts: ["Próprio", "Comum"], c: "Próprio" },
+            { p: "'CADEIRA' é um nome...", opts: ["Próprio", "Comum"], c: "Comum" },
+            { p: "'MARIA' começa com letra...", opts: ["Maiúscula", "Minúscula"], c: "Maiúscula" },
+            { p: "'GATO' é um substantivo...", opts: ["Próprio", "Comum"], c: "Comum" },
+            { p: "Nomes de cidades são...", opts: ["Próprios", "Comuns"], c: "Próprios" },
+            // Singular e Plural
+            { p: "Qual o plural de 'BOLA'?", opts: ["Bolas", "Bolez"], c: "Bolas" },
+            { p: "Qual o plural de 'PÃO'?", opts: ["Pãos", "Pães"], c: "Pães" },
+            { p: "Qual o plural de 'FLOR'?", opts: ["Flors", "Flores"], c: "Flores" },
+            { p: "Qual o plural de 'ANIMAL'?", opts: ["Animais", "Animals"], c: "Animais" },
+            { p: "O singular de 'CÃES' é...", opts: ["Cão", "Cãozinho"], c: "Cão" },
+            // Masculino e Feminino
+            { p: "O feminino de 'LEÃO' é...", opts: ["Leoa", "Leona"], c: "Leoa" },
+            { p: "Dizemos: ___ MENINA", opts: ["O", "A"], c: "A" },
+            { p: "Dizemos: ___ RELÓGIO", opts: ["O", "A"], c: "O" },
+            { p: "O masculino de 'VACA' é...", opts: ["Boi", "Bezerro"], c: "Boi" },
+            { p: "O feminino de 'PADRINHO' é...", opts: ["Madrinha", "Mãe"], c: "Madrinha" },
+            // Sílabas
+            { p: "Quantas sílabas tem 'CASA'?", opts: ["1", "2", "3"], c: "2" },
+            { p: "Quantas sílabas tem 'PIPOCA'?", opts: ["2", "3", "4"], c: "3" },
+            { p: "Quantas sílabas tem 'SOL'?", opts: ["1", "2"], c: "1" },
+            { p: "Quantas sílabas tem 'PIRULITO'?", opts: ["3", "4", "5"], c: "4" },
+            { p: "A palavra 'EU' tem...", opts: ["1 sílaba", "2 sílabas"], c: "1 sílaba" }
+        ];
+
+        let atual = 0;
+        let acertos = 0;
+
+        function carregar() {
+            if (atual >= questoesGramatica.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">🏆</span>
+                    <h2>Incrível!</h2>
+                    <p>Você completou o desafio de Gramática!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn" style="margin-top:20px">Voltar</a>
+                `;
+                return;
+            }
+
+            const q = questoesGramatica[atual];
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const btn = document.createElement('button');
+                btn.innerText = o;
+                btn.className = 'opt-btn';
+                btn.onclick = () => checar(o);
+                optDiv.appendChild(btn);
+            });
+
+            const prog = (atual / questoesGramatica.length) * 100;
+            document.getElementById('progress').style.width = prog + "%";
+        }
+
+        function checar(escolha) {
+            const feedback = document.getElementById('feedback');
+            if (escolha === questoesGramatica[atual].c) {
+                acertos++;
+                feedback.innerHTML = "<span style='color: #4ade80'>✨ Muito bem!</span>";
+                document.getElementById('score').innerText = acertos;
+            } else {
+                feedback.innerHTML = `<span style='color: #ff4d4d'>😅 Quase! Era: ${questoesGramatica[atual].c}</span>`;
+            }
+
+            atual++;
+            setTimeout(() => {
+                feedback.innerHTML = "";
+                carregar();
+            }, 1200);
+        }
+
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

@@ -1,151 +1,230 @@
-/* RESET GERAL E FONTES */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+/* --- 1. CONFIGURAÇÕES GLOBAIS E ANIMAÇÃO --- */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    /* Fundo Gradiente Animado (igual às outras telas) */
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background: linear-gradient(-45deg, #0f172a, #1e293b, #7367f0, #1e1b4b);
-    background-size: 400% 400%; /* Permite a animação do gradiente */
-    animation: gradient 15s ease infinite; /* Animação suave e contínua */
-    color: #f8fafc; /* Cor do texto principal */
-    min-height: 100vh; /* Ocupa a altura total da viewport */
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: #f8fafc;
+    min-height: 100vh;
     display: flex;
-    align-items: center; /* Centraliza o conteúdo verticalmente */
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 40px 0;
 }
 
-/* ANIMAÇÃO DO FUNDO */
 @keyframes gradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* ESTILO DAS PARTÍCULAS */
 #particles-js {
-    position: fixed; /* Fixa as partículas na tela */
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0; /* Garante que as partículas fiquem no fundo */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
 }
 
-/* CONTAINER PRINCIPAL DO CONTEÚDO */
 .container {
-    position: relative; /* Para z-index funcionar */
-    z-index: 1; /* Conteúdo à frente das partículas */
-    width: 100%;
-    max-width: 900px; /* Largura máxima para desktops */
-    padding: 20px;
-    text-align: center; /* Centraliza o texto */
-}
-
-/* CABEÇALHO HERO */
-.hero {
-    margin-bottom: 50px;
-}
-
-.title {
-    font-size: 3.5rem; /* Tamanho grande para destaque */
-    font-weight: 800; /* Negrito */
-    letter-spacing: -1px;
-    line-height: 1.1;
-}
-
-.title span {
-    color: #7367f0; /* Cor de destaque para "Interativa" */
-    display: block; /* Quebra de linha para "Interativa" */
-}
-
-.subtitle {
-    color: #cbd5e1; /* Cor mais suave para o subtítulo */
-    margin-top: 15px;
-    font-size: 1.2rem;
-}
-
-/* GRID DE NAVEGAÇÃO (CARTÕES/BOTÕES) */
-.menu-grid {
-    display: flex;
-    gap: 25px; /* Espaço entre os cartões */
-    justify-content: center;
-    flex-wrap: wrap; /* Permite que os cartões quebrem a linha em telas menores */
-    margin-top: 40px;
-}
-
-.card {
-    flex: 1; /* Faz os cartões crescerem igualmente */
-    min-width: 300px; /* Largura mínima para cada cartão em desktop */
-    max-width: 45%; /* Garante que dois cartões caibam lado a lado */
-    background: rgba(255, 255, 255, 0.08); /* Fundo translúcido (efeito vidro) */
-    backdrop-filter: blur(12px); /* Efeito blur para o glassmorphism */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
-    padding: 35px;
-    border-radius: 20px;
-    text-decoration: none; /* Remove sublinhado do link */
-    color: white;
-    transition: all 0.3s ease-in-out; /* Transição suave para hover */
-    display: flex;
-    flex-direction: column; /* Ícone e texto empilhados */
-    align-items: center;
+    width: 90%;
+    max-width: 850px;
+    z-index: 10;
+    position: relative;
     text-align: center;
 }
 
-.card:hover {
-    transform: translateY(-8px); /* Efeito de levantar no hover */
-    background: rgba(255, 255, 255, 0.15); /* Fundo um pouco mais opaco no hover */
-    border-color: #7367f0; /* Borda roxa no hover */
-    box-shadow: 0 10px 30px rgba(115, 103, 240, 0.2); /* Sombra mais intensa */
+/* --- 2. MENU DE SÉRIES E LINKS (BOTÕES CÁPSULA EQUALIZADOS) --- */
+.menu-grid, .list, .options-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    width: 100%;
 }
 
-.card-icon {
-    font-size: 3rem; /* Tamanho do ícone */
+/* Estilo padrão para todos os botões e links do site */
+.list a, .card, .opt-btn, .ponto-btn {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white !important;
+    padding: 18px 32px;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 800;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 450px; /* Garante que todos tenham a mesma largura */
+    cursor: pointer;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.list a:hover, .card:hover, .opt-btn:hover, .ponto-btn:hover {
+    background-color: #5d5dff;
+    border-color: #fff;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(93, 93, 255, 0.4);
+}
+
+/* Emojis Grandes em botões e títulos */
+.list a span, .emoji-large, .card-icon {
+    font-size: 2.8rem;
+    margin-right: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* --- 3. ESTILIZAÇÃO DAS PÁGINAS DE CONTEÚDO (TEORIA) --- */
+.content-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 40px;
+    margin-top: 20px;
+    text-align: left; /* Alinhamento para leitura de texto */
+}
+
+.secao-titulo, .regra-titulo {
+    color: #a78bfa; 
+    font-weight: 800;
+    font-size: 1.6rem;
+    display: block;
     margin-bottom: 15px;
-    color: #a78bfa; /* Cor do ícone */
+    border-left: 4px solid #7367f0;
+    padding-left: 15px;
 }
 
-.card-info h2 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-    color: #f8fafc;
+.regra-box {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card-info p {
-    color: #cbd5e1;
-    font-size: 1rem;
-    line-height: 1.5;
+.exemplo-box, .exemplo-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #7367f0;
+    padding: 20px;
+    border-radius: 0 20px 20px 0;
+    margin: 15px 0;
 }
 
-/* RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS */
-@media (max-width: 768px) {
-    .title {
-        font-size: 2.5rem; /* Ajusta o tamanho do título */
-    }
-    .subtitle {
-        font-size: 1rem; /* Ajusta o tamanho do subtítulo */
-    }
-    .menu-grid {
-        flex-direction: column; /* Empilha os cartões verticalmente */
-        align-items: center; /* Centraliza os cartões */
-    }
-    .card {
-        width: 90%; /* Ocupa a maior parte da largura da tela */
-        max-width: 400px; /* Limita a largura em telas maiores para não ficar gigante */
-        min-width: unset; /* Remove a restrição mínima para telas pequenas */
-        padding: 30px;
-    }
-    .card-icon {
-        font-size: 2.5rem;
-    }
-    .card-info h2 {
-        font-size: 1.5rem;
-    }
-    .card-info p {
-        font-size: 0.9rem;
-    }
+/* Destaque dourado para palavras importantes */
+.exemplo-box b, .exemplo-container b, b {
+    color: #ffd700;
+    font-weight: 800;
+}
+
+/* --- 4. COMPONENTES DOS JOGOS (CENTRALIZADOS) --- */
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o jogo dentro da content-box */
+    text-align: center;
+}
+
+.score-box {
+    background: #ffd700;
+    color: #000;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4ade80;
+    transition: 0.5s ease;
+    width: 0%;
+}
+
+.word-card, .phrase-card {
+    background: rgba(255, 255, 255, 0.07);
+    padding: 40px;
+    border-radius: 25px;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+}
+
+.phrase-card {
+    text-transform: none; /* Frases não precisam ser gritantes */
+    font-size: 1.5rem;
+}
+
+#feedback {
+    height: 40px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* --- 5. UTILITÁRIOS --- */
+.back, .back-button {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 800;
+    margin-bottom: 15px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.back:hover, .back-button:hover {
+    color: #fff;
+    transform: translateX(-5px);
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+}
+
+/* --- 6. RESPONSIVIDADE --- */
+@media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    .word-card { font-size: 1.8rem; }
+    .list a, .opt-btn { max-width: 100%; }
+    .content-box { padding: 20px; }
 }

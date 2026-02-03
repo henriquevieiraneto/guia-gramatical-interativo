@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios 1º Ano | Mestre da Língua</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .badge-xp {
+            background: #4ade80;
+            color: #000;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 800;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .card { position: relative; border: 2px solid transparent; transition: 0.3s; }
+        .card:hover { border-color: #7367f0; background: rgba(115, 103, 240, 0.1); }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div> 
+    
+    <main class="container">
+        <header class="hero">
+            <a href="../index.html" style="text-decoration: none; color: rgba(255,255,255,0.6); font-weight: 600;">← Voltar ao Menu do 1º Ano</a>
+            <h1 class="title" style="margin-top: 20px;">Hora de <span>Praticar!</span></h1>
+            <p class="subtitle">Escolha um desafio e ganhe pontos de Mestre.</p>
+        </header>
+
+        <nav class="menu-grid">
+            <a href="silabas.html" class="card">
+                <div class="badge-xp">+10 XP</div>
+                <div class="card-icon">🧩</div>
+                <div class="card-info">
+                    <h2>Contador de Sílabas</h2>
+                    <p>Quantos "pedaços" tem cada palavra?</p>
+                </div>
+            </a>
+
+            <a href="rimas-jogo.html" class="card">
+                <div class="badge-xp">+15 XP</div>
+                <div class="card-icon">🔔</div>
+                <div class="card-info">
+                    <h2>Mestre das Rimas</h2>
+                    <p>Encontre as palavras que terminam igual.</p>
+                </div>
+            </a>
+
+            <a href="espaco-jogo.html" class="card">
+                <div class="badge-xp">+20 XP</div>
+                <div class="card-icon">↔️</div>
+                <div class="card-info">
+                    <h2>Organizador de Frases</h2>
+                    <p>Coloque os espaços nos lugares certos.</p>
+                </div>
+            </a>
+
+            <a href="pontuacao-jogo.html" class="card">
+                <div class="badge-xp">+20 XP</div>
+                <div class="card-icon">❓</div>
+                <div class="card-info">
+                    <h2>Quem Pontua Mais?</h2>
+                    <p>Ponto final ou pergunta? Você decide!</p>
+                </div>
+            </a>
+        </nav>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script> 
+</body>
+</html>

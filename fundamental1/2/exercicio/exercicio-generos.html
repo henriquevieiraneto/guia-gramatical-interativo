@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Gêneros - 2º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair do Jogo</a>
+            <h1><span>📖</span> Detetive de Textos</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">Que tipo de texto é este?</p>
+                <div id="word-display" class="phrase-card">
+                    "Era uma vez uma princesa que vivia em um castelo..."
+                </div>
+                
+                <div id="options" class="options-grid">
+                    </div>
+            </div>
+
+            <div id="feedback"></div>
+        </div>
+    </main>
+
+    <script>
+        const questoesGeneros = [
+            { p: '"Era uma vez uma fada madrinha..."', opts: ["Conto de Fadas", "Receita"], c: "Conto de Fadas" },
+            { p: '"2 ovos, 1 xícara de leite, farinha..."', opts: ["Receita", "Poema"], c: "Receita" },
+            { p: '"Fui ao mercado. Volto logo. Beijos!"', opts: ["Bilhete", "Fábula"], c: "Bilhete" },
+            { p: '"A raposa e a uva (Moral: não despreze o que não consegue ter)"', opts: ["Fábula", "Convite"], c: "Fábula" },
+            { p: '"Batatinha quando nasce, se esparrama pelo chão..."', opts: ["Poema", "Bilhete"], c: "Poema" },
+            { p: '"Venha para minha festa de 7 anos!"', opts: ["Convite", "Fábula"], c: "Convite" },
+            { p: '"Ingredientes: 500g de chocolate..."', opts: ["Receita", "Conto de Fadas"], c: "Receita" },
+            { p: '"O leão e o ratinho (Moral: tamanho não é documento)"', opts: ["Fábula", "Poema"], c: "Fábula" },
+            { p: '"Vovó, deixei seu remédio na mesa. Te amo!"', opts: ["Bilhete", "Receita"], c: "Bilhete" },
+            { p: '"Lugar: Minha casa. Horário: 15h. Não falte!"', opts: ["Convite", "Poema"], c: "Convite" },
+            { p: '"A cigarra e a formiga (Ensina sobre o trabalho)"', opts: ["Fábula", "Conto de Fadas"], c: "Fábula" },
+            { p: '"Bata tudo no liquidificador por 5 minutos."', opts: ["Receita", "Bilhete"], c: "Receita" },
+            { p: '"A Cinderela perdeu seu sapatinho de cristal."', opts: ["Conto de Fadas", "Convite"], c: "Conto de Fadas" },
+            { p: '"O sapo não lava o pé, não lava porque não quer."', opts: ["Poema", "Receita"], c: "Poema" },
+            { p: '"Mamãe, a professora ligou para você."', opts: ["Bilhete", "Poema"], c: "Bilhete" },
+            { p: '"Branca de Neve comeu a maçã envenenada."', opts: ["Conto de Fadas", "Fábula"], c: "Conto de Fadas" },
+            { p: '"Modo de preparo: Unte a forma com manteiga."', opts: ["Receita", "Poema"], c: "Receita" },
+            { p: '"Chapeuzinho Vermelho foi levar doces para a vovó."', opts: ["Conto de Fadas", "Bilhete"], c: "Conto de Fadas" },
+            { p: '"Sou pequeno e delicado, mas sou muito esforçado."', opts: ["Poema", "Convite"], c: "Poema" },
+            { p: '"Data: 10 de Maio. Local: Salão de Festas."', opts: ["Convite", "Receita"], c: "Convite" }
+        ];
+
+        let atual = 0;
+        let acertos = 0;
+
+        function carregar() {
+            if (atual >= questoesGeneros.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">🏆</span>
+                    <h2>Fim de Jogo!</h2>
+                    <p>Você é um mestre dos textos!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questoesGeneros[atual];
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const btn = document.createElement('button');
+                btn.innerText = o;
+                btn.className = 'opt-btn'; // Usa a regra do CSS de 450px
+                btn.onclick = () => checar(o);
+                optDiv.appendChild(btn);
+            });
+
+            const prog = (atual / questoesGeneros.length) * 100;
+            document.getElementById('progress').style.width = prog + "%";
+        }
+
+        function checar(escolha) {
+            const feedback = document.getElementById('feedback');
+            if (escolha === questoesGeneros[atual].c) {
+                acertos++;
+                feedback.innerHTML = "<span style='color: #4ade80'>✅ Certinho!</span>";
+                document.getElementById('score').innerText = acertos;
+            } else {
+                feedback.innerHTML = `<span style='color: #ff4d4d'>❌ Era: ${questoesGeneros[atual].c}</span>`;
+            }
+
+            atual++;
+            setTimeout(() => {
+                feedback.innerHTML = "";
+                carregar();
+            }, 1200);
+        }
+
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

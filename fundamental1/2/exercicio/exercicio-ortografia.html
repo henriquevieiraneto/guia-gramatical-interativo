@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Ortografia - 2º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair do Jogo</a>
+            <h1><span>🎮</span> Desafio Ortográfico</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">Complete a palavra corretamente:</p>
+                <div id="word-display" class="word-card">CAR_O</div>
+                
+                <div id="options" class="options-grid">
+                    </div>
+            </div>
+
+            <div id="feedback"></div>
+        </div>
+    </main>
+
+    <script>
+        const questaoOriginal = [
+            // M antes de P e B
+            { p: "TA_BOR", opts: ["M", "N"], c: "M" },
+            { p: "BA_DEIRA", opts: ["M", "N"], c: "N" },
+            { p: "CA_PO", opts: ["M", "N"], c: "M" },
+            { p: "ME_Sagem", opts: ["N", "M"], c: "N" },
+            { p: "U_BIGO", opts: ["M", "N"], c: "M" },
+            // R e RR
+            { p: "CA_O (veículo)", opts: ["R", "RR"], c: "RR" },
+            { p: "A_ARA", opts: ["R", "RR"], c: "R" },
+            { p: "_ATO", opts: ["R", "RR"], c: "R" },
+            { p: "FE_O", opts: ["R", "RR"], c: "RR" },
+            { p: "BA_ATA", opts: ["R", "RR"], c: "R" },
+            // S e SS
+            { p: "CA_A (moradia)", opts: ["S", "SS"], c: "S" },
+            { p: "PA_ARINHO", opts: ["S", "SS"], c: "SS" },
+            { p: "RO_A (flor)", opts: ["S", "SS"], c: "S" },
+            { p: "MI_A", opts: ["S", "SS"], c: "SS" },
+            { p: "VA_O", opts: ["S", "SS"], c: "S" },
+            // Dígrafos (CH, LH, NH)
+            { p: "COE_O", opts: ["LH", "NH"], c: "LH" },
+            { p: "GALI_A", opts: ["NH", "LH"], c: "NH" },
+            { p: "_UVEIRO", opts: ["CH", "X"], c: "CH" },
+            { p: "NI_O", opts: ["NH", "LH"], c: "NH" },
+            { p: "TE_A (telhado)", opts: ["LH", "NH"], c: "LH" }
+        ];
+
+        let atual = 0;
+        let acertos = 0;
+
+        function carregar() {
+            if (atual >= questaoOriginal.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">🏆</span>
+                    <h2>Fim de Jogo!</h2>
+                    <p>Você acertou ${acertos} de 20!</p>
+                    <a href="index.html" class="opt-btn" style="margin-top:20px">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questaoOriginal[atual];
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const btn = document.createElement('button');
+                btn.innerText = o;
+                btn.className = 'opt-btn';
+                btn.onclick = () => checar(o);
+                optDiv.appendChild(btn);
+            });
+
+            const prog = (atual / questaoOriginal.length) * 100;
+            document.getElementById('progress').style.width = prog + "%";
+        }
+
+        function checar(escolha) {
+            const feedback = document.getElementById('feedback');
+            if (escolha === questaoOriginal[atual].c) {
+                acertos++;
+                feedback.innerHTML = "<span style='color: #4ade80'>✅ Correto!</span>";
+                document.getElementById('score').innerText = acertos;
+            } else {
+                feedback.innerHTML = `<span style='color: #ff4d4d'>❌ Errado! Era ${questaoOriginal[atual].c}</span>`;
+            }
+
+            atual++;
+            setTimeout(() => {
+                feedback.innerHTML = "";
+                carregar();
+            }, 1200);
+        }
+
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>
