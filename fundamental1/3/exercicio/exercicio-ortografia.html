@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Ortográfico - 3º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair</a>
+            <h1><span>🕵️</span> Missão: Sons do X e H</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">Analise a palavra abaixo:</p>
+                <div id="word-display" class="word-card">TÁXI</div>
+                <div id="options" class="options-grid"></div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questoes = [
+            // Sons do X
+            { p: "EXAME", q: "Qual o som do X nesta palavra?", opts: ["Som de Z", "Som de CH"], c: "Som de Z" },
+            { p: "PEIXE", q: "Qual o som do X nesta palavra?", opts: ["Som de CH", "Som de CS"], c: "Som de CH" },
+            { p: "TÁXI", q: "Qual o som do X nesta palavra?", opts: ["Som de CS", "Som de S"], c: "Som de CS" },
+            { p: "TEXTO", q: "Qual o som do X nesta palavra?", opts: ["Som de S/SS", "Som de Z"], c: "Som de S/SS" },
+            { p: "AUXÍLIO", q: "Qual o som do X nesta palavra?", opts: ["Som de S/SS", "Som de CH"], c: "Som de S/SS" },
+            { p: "EXÉRCITO", q: "Qual o som do X nesta palavra?", opts: ["Som de Z", "Som de CS"], c: "Som de Z" },
+            { p: "CAIXA", q: "Qual o som do X nesta palavra?", opts: ["Som de CH", "Som de S"], c: "Som de CH" },
+            { p: "BOXE", q: "Qual o som do X nesta palavra?", opts: ["Som de CS", "Som de Z"], c: "Som de CS" },
+            // H Inicial
+            { p: "_OJE", q: "Como se escreve corretamente?", opts: ["HOJE", "OJE"], c: "HOJE" },
+            { p: "_ÉLICE", q: "Como se escreve corretamente?", opts: ["HÉLICE", "ÉLICE"], c: "HÉLICE" },
+            { p: "_IENA", q: "Como se escreve corretamente?", opts: ["HIENA", "IENA"], c: "HIENA" },
+            { p: "_ÁBITO", q: "Como se escreve corretamente?", opts: ["HÁBITO", "ÁBITO"], c: "HÁBITO" },
+            // Acentuação
+            { p: "PICOL_", q: "Qual acento completa a palavra?", opts: ["É (Agudo)", "Ê (Circunflexo)"], c: "É (Agudo)" },
+            { p: "ROB_", q: "Qual acento completa a palavra?", opts: ["Ó (Agudo)", "Ô (Circunflexo)"], c: "Ô (Circunflexo)" },
+            { p: "ÁRVORE", q: "O acento em ÁRVORE é:", opts: ["Agudo", "Circunflexo"], c: "Agudo" },
+            { p: "TÊNIS", q: "O acento em TÊNIS é:", opts: ["Agudo", "Circunflexo"], c: "Circunflexo" },
+            { p: "MÚSICA", q: "O som da letra U em MÚSICA é:", opts: ["Aberto (Agudo)", "Fechado (Circunflexo)"], c: "Aberto (Agudo)" },
+            { p: "LÂMPADA", q: "O acento em LÂMPADA é:", opts: ["Agudo", "Circunflexo"], c: "Circunflexo" },
+            { p: "CAFÉ", q: "O som da letra E em CAFÉ é:", opts: ["Aberto (Agudo)", "Fechado (Circunflexo)"], c: "Aberto (Agudo)" },
+            { p: "ÔNIBUS", q: "Qual acento o O recebe?", opts: ["Agudo", "Circunflexo"], c: "Circunflexo" }
+        ];
+
+        let atual = 0, acertos = 0;
+
+        function carregar() {
+            if (atual >= questoes.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <h2>🏆 Missão Cumprida!</h2>
+                    <p>Você dominou os sons e acentos!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questoes[atual];
+            document.getElementById('instrucao').innerText = q.q;
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const b = document.createElement('button');
+                b.innerText = o;
+                b.className = 'opt-btn';
+                b.onclick = () => {
+                    const feed = document.getElementById('feedback');
+                    if (o === q.c) {
+                        acertos++;
+                        feed.innerHTML = "<span style='color: #4ade80'>✅ Excelente!</span>";
+                    } else {
+                        feed.innerHTML = `<span style='color: #ff4d4d'>❌ Resposta: ${q.c}</span>`;
+                    }
+                    atual++;
+                    document.getElementById('score').innerText = acertos;
+                    document.getElementById('progress').style.width = (atual / 20) * 100 + "%";
+                    setTimeout(() => { feed.innerHTML = ""; carregar(); }, 1200);
+                };
+                optDiv.appendChild(b);
+            });
+        }
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

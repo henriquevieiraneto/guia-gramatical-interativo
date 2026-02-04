@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicionário Sem Fronteiras</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .search-box { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; align-items: center; }
+        #search-input {
+            padding: 15px; border-radius: 25px; border: 2px solid var(--gold);
+            background: rgba(255, 255, 255, 0.1); color: white; width: 100%;
+            max-width: 450px; text-align: center; outline: none; font-size: 1.1em;
+        }
+        .result-container { text-align: left; display: none; animation: fadeIn 0.5s ease; }
+        .meaning-card { 
+            background: rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 20px; 
+            border: 1px solid rgba(212, 175, 55, 0.3); max-width: 700px; margin: 0 auto;
+        }
+        #res-palavra { 
+            color: var(--gold); text-transform: uppercase; font-size: 2em; 
+            margin-bottom: 10px; text-align: center; border-bottom: 2px solid var(--gold); 
+            display: block;
+        }
+        .meaning-list { list-style: none; padding: 0; margin-top: 10px; }
+        .meaning-list li { 
+            position: relative; padding: 15px 0 15px 40px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            color: #ffffff; line-height: 1.6; font-size: 1.1em;
+        }
+        .meaning-list li::before { 
+            content: "➤"; position: absolute; left: 10px; color: var(--gold);
+        }
+        .loading { display: none; color: var(--gold); margin: 20px; text-align: center; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Voltar</a>
+            <h1><span>📖</span> Dicionário Aberto</h1>
+            <p>Termos, gírias e expressões sem censura</p>
+        </header>
+
+        <section class="content-box">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Busque qualquer termo ou frase..." autocomplete="off">
+                <button onclick="buscarPalavra()" class="opt-btn" style="width: 100%; max-width: 450px;">Pesquisar</button>
+            </div>
+
+            <div id="loading" class="loading">🔍 Consultando rede global...</div>
+
+            <div id="result" class="result-container">
+                <h2 id="res-palavra"></h2>
+                <div class="meaning-card">
+                    <ul id="res-significados" class="meaning-list"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        async function buscarPalavra() {
+            const input = document.getElementById('search-input');
+            const termo = input.value.trim();
+            const resultDiv = document.getElementById('result');
+            const loading = document.getElementById('loading');
+            const sigList = document.getElementById('res-significados');
+
+            if (!termo) return;
+
+            loading.style.display = 'block';
+            resultDiv.style.display = 'none';
+            sigList.innerHTML = '';
+
+            try {
+                // API da Wikipedia/Wiktionary para busca de termos amplos e gírias
+                const url = `https://pt.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(termo.replace(/ /g, '_'))}`;
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    loading.style.display = 'none';
+                    resultDiv.style.display = 'block';
+                    document.getElementById('res-palavra').innerText = termo;
+
+                    // Adiciona a descrição principal como primeiro item
+                    const li = document.createElement('li');
+                    li.innerText = data.extract || "Nenhuma definição detalhada encontrada, mas o termo existe.";
+                    sigList.appendChild(li);
+                } else {
+                    // Fallback para o dicionário clássico se a Wikipedia não tiver o termo exato
+                    const resp2 = await fetch(`https://api.dicionario-aberto.net/word/${termo.toLowerCase()}`);
+                    const data2 = await resp2.json();
+                    
+                    loading.style.display = 'none';
+                    if (data2 && data2.length > 0) {
+                        resultDiv.style.display = 'block';
+                        document.getElementById('res-palavra').innerText = termo;
+                        data2.forEach(item => {
+                            const li = document.createElement('li');
+                            li.innerText = item.xml.replace(/<[^>]*>?/gm, ' ').trim();
+                            sigList.appendChild(li);
+                        });
+                    } else {
+                        alert("Termo não encontrado em nenhuma das bases.");
+                    }
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                alert("Erro ao conectar com a rede.");
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') buscarPalavra();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="particles.js"></script>
+</body>
+</html>

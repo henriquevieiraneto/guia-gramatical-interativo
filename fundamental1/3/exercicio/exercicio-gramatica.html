@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Gramatical - 3º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair</a>
+            <h1><span>⚡</span> Desafio: Verbos e Adjetivos</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">O que a palavra em destaque representa?</p>
+                <div id="word-display" class="phrase-card">O menino é <b>INTELIGENTE</b>.</div>
+                <div id="options" class="options-grid"></div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questoes = [
+            // Adjetivos (Qualidades)
+            { p: "A flor é CHEIROSA.", q: "A palavra CHEIROSA é:", opts: ["Adjetivo (Qualidade)", "Verbo (Ação)"], c: "Adjetivo (Qualidade)" },
+            { p: "O carro VELOZ passou.", q: "A palavra VELOZ é:", opts: ["Adjetivo (Qualidade)", "Verbo (Ação)"], c: "Adjetivo (Qualidade)" },
+            { p: "Ganhei um urso FOFO.", q: "A palavra FOFO é:", opts: ["Adjetivo (Qualidade)", "Pronome"], c: "Adjetivo (Qualidade)" },
+            // Verbos (Ações)
+            { p: "A menina CORREU muito.", q: "A palavra CORREU é:", opts: ["Verbo (Ação)", "Adjetivo"], c: "Verbo (Ação)" },
+            { p: "Nós ESTUDAMOS ontem.", q: "A palavra ESTUDAMOS é:", opts: ["Verbo (Ação)", "Pronome"], c: "Verbo (Ação)" },
+            { p: "O passarinho CANTA alto.", q: "A palavra CANTA é:", opts: ["Verbo (Ação)", "Adjetivo"], c: "Verbo (Ação)" },
+            { p: "Eu PULEI a corda.", q: "A palavra PULEI é:", opts: ["Verbo (Ação)", "Adjetivo"], c: "Verbo (Ação)" },
+            // Pronomes
+            { p: "ELA foi ao parque.", q: "A palavra ELA é:", opts: ["Pronome", "Verbo"], c: "Pronome" },
+            { p: "NÓS somos amigos.", q: "A palavra NÓS é:", opts: ["Pronome", "Adjetivo"], c: "Pronome" },
+            { p: "ELES ganharam o jogo.", q: "A palavra ELES é:", opts: ["Pronome", "Verbo"], c: "Pronome" },
+            // Diminutivo/Aumentativo
+            { p: "GATINHO", q: "A palavra GATINHO está no:", opts: ["Diminutivo", "Aumentativo"], c: "Diminutivo" },
+            { p: "CASARÃO", q: "A palavra CASARÃO está no:", opts: ["Diminutivo", "Aumentativo"], c: "Aumentativo" },
+            { p: "Cãozinho", q: "A palavra Cãozinho está no:", opts: ["Diminutivo", "Aumentativo"], c: "Diminutivo" },
+            // Misturado para testar
+            { p: "O sol está QUENTE.", q: "QUENTE é:", opts: ["Adjetivo", "Verbo"], c: "Adjetivo" },
+            { p: "Vovó COZINHOU sopa.", q: "COZINHOU é:", opts: ["Verbo", "Pronome"], c: "Verbo" },
+            { p: "EU gosto de sorvete.", q: "EU é:", opts: ["Pronome", "Adjetivo"], c: "Pronome" },
+            { p: "A casa é GRANDE.", q: "GRANDE é:", opts: ["Adjetivo", "Verbo"], c: "Adjetivo" },
+            { p: "Eles BRINCAM juntos.", q: "BRINCAM é:", opts: ["Verbo", "Adjetivo"], c: "Verbo" },
+            { p: "VOCÊ é legal!", q: "VOCÊ é:", opts: ["Pronome", "Verbo"], c: "Pronome" },
+            { p: "O mar é AZUL.", q: "AZUL é:", opts: ["Adjetivo", "Verbo"], c: "Adjetivo" }
+        ];
+
+        let atual = 0, acertos = 0;
+
+        function carregar() {
+            if (atual >= questoes.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">⚡</span>
+                    <h2>Gramática Concluída!</h2>
+                    <p>Você sabe tudo sobre as palavras!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questoes[atual];
+            document.getElementById('instrucao').innerText = q.q;
+            document.getElementById('word-display').innerHTML = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const b = document.createElement('button');
+                b.innerText = o;
+                b.className = 'opt-btn';
+                b.onclick = () => {
+                    const feed = document.getElementById('feedback');
+                    if (o === q.c) {
+                        acertos++;
+                        feed.innerHTML = "<span style='color: #4ade80'>✅ Isso mesmo!</span>";
+                    } else {
+                        feed.innerHTML = `<span style='color: #ff4d4d'>❌ É um(a) ${q.c}</span>`;
+                    }
+                    atual++;
+                    document.getElementById('score').innerText = acertos;
+                    document.getElementById('progress').style.width = (atual / 20) * 100 + "%";
+                    setTimeout(() => { feed.innerHTML = ""; carregar(); }, 1200);
+                };
+                optDiv.appendChild(b);
+            });
+        }
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

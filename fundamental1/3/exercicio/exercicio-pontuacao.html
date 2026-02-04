@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Pontuação - 3º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair</a>
+            <h1><span>📍</span> Mestre da Pontuação</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">Qual sinal completa corretamente a frase?</p>
+                <div id="word-display" class="phrase-card">Fui ao mercado e comprei__ maçã e uva.</div>
+                <div id="options" class="options-grid"></div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questoes = [
+            { p: "A professora disse__ — Abram os livros!", q: "Qual sinal indica que alguém vai falar?", opts: [": (Dois-pontos)", ", (Vírgula)"], c: ": (Dois-pontos)" },
+            { p: "Na mochila tenho__ lápis, borracha e caneta.", q: "Qual sinal inicia uma lista?", opts: [": (Dois-pontos)", "( ) (Parênteses)"], c: ": (Dois-pontos)" },
+            { p: "Minha irmã __que se chama Ana__ é legal.", q: "Qual sinal usamos para uma explicação extra?", opts: ["( ) (Parênteses)", ": (Dois-pontos)"], c: "( ) (Parênteses)" },
+            { p: "Comi pão__ queijo e presunto.", q: "Como separamos os itens da lista?", opts: [", (Vírgula)", ": (Dois-pontos)"], c: ", (Vírgula)" },
+            { p: "O Brasil __um país grande__ fica na América.", q: "O que envolve a explicação 'um país grande'?", opts: ["( ) (Parênteses)", ", (Vírgula)"], c: "( ) (Parênteses)" },
+            { p: "A receita leva__ ovos, leite e farinha.", q: "Sinal usado antes dos ingredientes:", opts: [": (Dois-pontos)", "; (Ponto e vírgula)"], c: ": (Dois-pontos)" },
+            { p: "Ele gritou__ — Cuidado!", q: "Sinal usado antes do grito:", opts: [": (Dois-pontos)", ", (Vírgula)"], c: ": (Dois-pontos)" },
+            { p: "Amanhã __sábado__ vamos ao cinema.", q: "Qual sinal isola o dia da semana?", opts: ["( ) (Parênteses)", ": (Dois-pontos)"], c: "( ) (Parênteses)" },
+            { p: "O sol está forte__ as crianças brincam.", q: "Sinal para uma pausa maior que a vírgula:", opts: ["; (Ponto e Vírgula)", ", (Vírgula)"], c: "; (Ponto e Vírgula)" },
+            { p: "O gato __manhoso__ dormiu no sofá.", q: "Para explicar que o gato é manhoso:", opts: ["( ) (Parênteses)", ": (Dois-pontos)"], c: "( ) (Parênteses)" },
+            { p: "Maria gosta de__ ler, cantar e dançar.", q: "Sinal usado antes das atividades:", opts: [": (Dois-pontos)", ", (Vírgula)"], c: ": (Dois-pontos)" },
+            { p: "Pedro__ venha aqui agora!", q: "Pausa após chamar o nome:", opts: [", (Vírgula)", ": (Dois-pontos)"], c: ", (Vírgula)" },
+            { p: "O filme __de terror__ deu muito medo.", q: "Sinal para a informação extra:", opts: ["( ) (Parênteses)", "; (Ponto e Vírgula)"], c: "( ) (Parênteses)" },
+            { p: "O cachorro latiu__ au au!", q: "Sinal antes do som do animal:", opts: [": (Dois-pontos)", "( ) (Parênteses)"], c: ": (Dois-pontos)" },
+            { p: "Fomos a Roma __na Itália__ nas férias.", q: "Sinal para explicar onde fica Roma:", opts: ["( ) (Parênteses)", ": (Dois-pontos)"], c: "( ) (Parênteses)" },
+            { p: "Traga__ papel, cola e tesoura.", q: "Sinal para começar a lista:", opts: [": (Dois-pontos)", ", (Vírgula)"], c: ": (Dois-pontos)" },
+            { p: "Ana__ Bia e Cláudia saíram.", q: "Sinal para separar os nomes:", opts: [", (Vírgula)", ": (Dois-pontos)"], c: ", (Vírgula)" },
+            { p: "Ele explicou__ — A terra é redonda.", q: "Sinal antes da explicação:", opts: [": (Dois-pontos)", "( ) (Parênteses)"], c: ": (Dois-pontos)" },
+            { p: "O livro __que ganhei ontem__ é ótimo.", q: "Sinal para os detalhes do livro:", opts: ["( ) (Parênteses)", ": (Dois-pontos)"], c: "( ) (Parênteses)" },
+            { p: "Papai disse__ — Boa noite!", q: "Sinal antes da fala do papai:", opts: [": (Dois-pontos)", ", (Vírgula)"], c: ": (Dois-pontos)" }
+        ];
+
+        let atual = 0, acertos = 0;
+
+        function carregar() {
+            if (atual >= questoes.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">🏆</span>
+                    <h2>Pontuação Perfeita!</h2>
+                    <p>Você sabe organizar as frases muito bem!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questoes[atual];
+            document.getElementById('instrucao').innerText = q.q;
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const b = document.createElement('button');
+                b.innerText = o;
+                b.className = 'opt-btn';
+                b.onclick = () => {
+                    const feed = document.getElementById('feedback');
+                    if (o === q.c) {
+                        acertos++;
+                        feed.innerHTML = "<span style='color: #4ade80'>✅ Certinho!</span>";
+                    } else {
+                        feed.innerHTML = `<span style='color: #ff4d4d'>❌ O correto é ${q.c}</span>`;
+                    }
+                    atual++;
+                    document.getElementById('score').innerText = acertos;
+                    document.getElementById('progress').style.width = (atual / 20) * 100 + "%";
+                    setTimeout(() => { feed.innerHTML = ""; carregar(); }, 1200);
+                };
+                optDiv.appendChild(b);
+            });
+        }
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>

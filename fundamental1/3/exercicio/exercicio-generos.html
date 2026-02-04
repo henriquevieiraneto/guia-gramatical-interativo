@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Gêneros - 3º Ano</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <main class="container">
+        <header>
+            <a href="index.html" class="back">← Sair</a>
+            <h1><span>🗞️</span> Detetive de Gêneros</h1>
+            <div class="score-box">Acertos: <span id="score">0</span> / 20</div>
+        </header>
+
+        <div class="progress-bar">
+            <div id="progress" class="progress-fill"></div>
+        </div>
+
+        <div class="content-box">
+            <div id="game-container">
+                <p id="instrucao">A que gênero pertence este exemplo?</p>
+                <div id="word-display" class="phrase-card">"BOOM! POW! CABRUM!"</div>
+                <div id="options" class="options-grid"></div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questoes = [
+            { p: '"BOOM! POW! CABRUM!"', q: "Onde encontramos essas onomatopeias?", opts: ["História em Quadrinhos", "Notícia"], c: "História em Quadrinhos" },
+            { p: '"São Paulo, 12 de Outubro. Querida vovó..."', q: "Este início pertence a uma:", opts: ["Carta", "História em Quadrinhos"], c: "Carta" },
+            { p: '"Cientistas descobrem nova espécie de peixe no Amazonas."', q: "Este texto é uma:", opts: ["Notícia", "Carta"], c: "Notícia" },
+            { p: '"SÓ HOJE! Leve dois brinquedos e pague um!"', q: "Este texto é um:", opts: ["Anúncio / Propaganda", "E-mail"], c: "Anúncio / Propaganda" },
+            { p: '"Para: diretor@escola.com | Assunto: Reunião"', q: "Este formato é típico de um:", opts: ["E-mail", "História em Quadrinhos"], c: "E-mail" },
+            { p: '"Um balão de fala com pontas de raio indica um grito."', q: "Isso é comum em:", opts: ["História em Quadrinhos", "Notícia"], c: "História em Quadrinhos" },
+            { p: '"Um beijo com carinho, de seu melhor amigo."', q: "Esta é uma despedida de:", opts: ["Carta / Bilhete", "Notícia"], c: "Carta / Bilhete" },
+            { p: '"O fato aconteceu na tarde de ontem, no centro da cidade."', q: "Texto que relata fatos reais:", opts: ["Notícia", "Anúncio"], c: "Notícia" },
+            { p: '"NHAC! (Som de alguém mordendo uma maçã)"', q: "Essa onomatopeia aparece em:", opts: ["História em Quadrinhos", "E-mail"], c: "História em Quadrinhos" },
+            { p: '"Título chamativo e uma foto do produto."', q: "Elementos principais de um:", opts: ["Anúncio / Propaganda", "Carta"], c: "Anúncio / Propaganda" },
+            { p: '"Ontem, os alunos visitaram o museu de arte."', q: "Este relato informativo é uma:", opts: ["Notícia", "História em Quadrinhos"], c: "Notícia" },
+            { p: '"Local, Data, Saudação e Despedida."', q: "São partes de uma:", opts: ["Carta", "Notícia"], c: "Carta" },
+            { p: '"Vende-se bicicleta azul em ótimo estado!"', q: "Este texto curto é um:", opts: ["Anúncio", "E-mail"], c: "Anúncio" },
+            { p: '"Balões de pensamento em formato de nuvem."', q: "Usados exclusivamente em:", opts: ["História em Quadrinhos", "Carta"], c: "História em Quadrinhos" },
+            { p: '"Onde? Quando? Quem? Como?"', q: "Perguntas que toda boa ___ responde:", opts: ["Notícia", "Anúncio"], c: "Notícia" },
+            { p: '"Assunto: Convite para o meu aniversário."', q: "Encontrado no topo de um:", opts: ["E-mail", "História em Quadrinhos"], c: "E-mail" },
+            { p: '"Zzzz... (Som de alguém dormindo)"', q: "Som representado em uma:", opts: ["História em Quadrinhos", "Notícia"], c: "História em Quadrinhos" },
+            { p: '"Prezados senhores, venho informar que..."', q: "Início de uma:", opts: ["Carta / E-mail Formal", "Anúncio"], c: "Carta / E-mail Formal" },
+            { p: '"O prefeito inaugurou a nova praça do bairro."', q: "Frase principal de uma:", opts: ["Notícia", "Carta"], c: "Notícia" },
+            { p: '"A turma da Mônica foi à praia."', q: "Exemplo famoso de:", opts: ["História em Quadrinhos", "E-mail"], c: "História em Quadrinhos" }
+        ];
+
+        let atual = 0, acertos = 0;
+
+        function carregar() {
+            if (atual >= questoes.length) {
+                document.getElementById('game-container').innerHTML = `
+                    <span class="emoji-large">🗞️</span>
+                    <h2>Mestre dos Gêneros!</h2>
+                    <p>Você sabe identificar todos os textos do dia a dia!</p>
+                    <p>Acertos: ${acertos} de 20</p>
+                    <a href="index.html" class="opt-btn">Voltar ao Menu</a>
+                `;
+                return;
+            }
+
+            const q = questoes[atual];
+            document.getElementById('instrucao').innerText = q.q;
+            document.getElementById('word-display').innerText = q.p;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+
+            q.opts.forEach(o => {
+                const b = document.createElement('button');
+                b.innerText = o;
+                b.className = 'opt-btn';
+                b.onclick = () => {
+                    const feed = document.getElementById('feedback');
+                    if (o === q.c) {
+                        acertos++;
+                        feed.innerHTML = "<span style='color: #4ade80'>✅ Detetive nota 10!</span>";
+                    } else {
+                        feed.innerHTML = `<span style='color: #ff4d4d'>❌ Pertence a: ${q.c}</span>`;
+                    }
+                    atual++;
+                    document.getElementById('score').innerText = acertos;
+                    document.getElementById('progress').style.width = (atual / 20) * 100 + "%";
+                    setTimeout(() => { feed.innerHTML = ""; carregar(); }, 1200);
+                };
+                optDiv.appendChild(b);
+            });
+        }
+        carregar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../../../particles.js"></script>
+</body>
+</html>
